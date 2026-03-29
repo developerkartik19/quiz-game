@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizForge — Test Your Knowledge</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <!-- Fallback fonts if Google Fonts unavailable -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap');
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════ HEADER ══════════════ -->
+  <header class="header">
+    <div class="logo">Quiz<span>Forge</span></div>
+    <div class="header-right">
+      <div class="high-score-display" id="highScoreDisplay" title="Your best score">
+        🏆 <span id="highScoreVal">--</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span class="theme-icon">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══════════════ MAIN APP ══════════════ -->
+  <main class="app-container">
+
+    <!-- ── SCREEN 1: Start / Welcome ── -->
+    <section class="screen" id="startScreen">
+      <div class="card start-card">
+        <div class="start-badge">10 Questions · Timed</div>
+        <h1 class="start-title">Ready to<br/><em>challenge</em><br/>yourself?</h1>
+        <p class="start-desc">
+          Answer 10 randomized questions with a 15-second timer each.
+          Your score and best streak are saved locally.
+        </p>
+        <div class="category-selector">
+          <label class="selector-label">Pick a category</label>
+          <div class="category-pills" id="categoryPills">
+            <button class="pill active" data-cat="9">General Knowledge</button>
+            <button class="pill" data-cat="17">Science &amp; Nature</button>
+            <button class="pill" data-cat="23">History</button>
+            <button class="pill" data-cat="11">Movies</button>
+            <button class="pill" data-cat="21">Sports</button>
+          </div>
+        </div>
+        <div class="difficulty-selector">
+          <label class="selector-label">Difficulty</label>
+          <div class="diff-pills" id="diffPills">
+            <button class="pill active" data-diff="easy">Easy</button>
+            <button class="pill" data-diff="medium">Medium</button>
+            <button class="pill" data-diff="hard">Hard</button>
+          </div>
+        </div>
+        <button class="btn-primary" id="startBtn">
+          <span>Start Quiz</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <p class="api-note" id="apiNote">Fetching from Open Trivia DB…</p>
+      </div>
+    </section>
+
+    <!-- ── SCREEN 2: Loading ── -->
+    <section class="screen hidden" id="loadingScreen">
+      <div class="card loading-card">
+        <div class="loader-ring"></div>
+        <p class="loading-text">Fetching questions…</p>
+      </div>
+    </section>
+
+    <!-- ── SCREEN 3: Quiz ── -->
+    <section class="screen hidden" id="quizScreen">
+      <!-- Top HUD -->
+      <div class="quiz-hud">
+        <div class="hud-item">
+          <span class="hud-label">Question</span>
+          <span class="hud-value" id="questionCounter">1 / 10</span>
+        </div>
+        <div class="hud-timer" id="hudTimer">
+          <svg class="timer-ring" viewBox="0 0 44 44">
+            <circle class="timer-track" cx="22" cy="22" r="18" />
+            <circle class="timer-progress" id="timerCircle" cx="22" cy="22" r="18" />
+          </svg>
+          <span class="timer-num" id="timerNum">15</span>
+        </div>
+        <div class="hud-item" style="text-align:right">
+          <span class="hud-label">Score</span>
+          <span class="hud-value" id="scoreDisplay">0</span>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="card question-card" id="questionCard">
+        <div class="q-category" id="qCategory">Category</div>
+        <p class="q-text" id="questionText">Question text here…</p>
+        <div class="options-grid" id="optionsGrid">
+          <!-- Options injected by JS -->
+        </div>
+        <div class="q-feedback hidden" id="qFeedback">
+          <span class="feedback-icon"></span>
+          <span class="feedback-text"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SCREEN 4: Result ── -->
+    <section class="screen hidden" id="resultScreen">
+      <div class="card result-card">
+        <div class="result-emoji" id="resultEmoji">🎉</div>
+        <div class="result-grade" id="resultGrade">Excellent!</div>
+        <div class="score-circle">
+          <svg viewBox="0 0 120 120">
+            <circle class="score-track" cx="60" cy="60" r="52"/>
+            <circle class="score-arc" id="scoreArc" cx="60" cy="60" r="52"/>
+          </svg>
+          <div class="score-inner">
+            <span class="score-pct" id="scorePct">0%</span>
+            <span class="score-sub">score</span>
+          </div>
+        </div>
+        <div class="result-stats">
+          <div class="stat-item">
+            <span class="stat-val" id="statCorrect">0</span>
+            <span class="stat-label">Correct</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-val" id="statWrong">0</span>
+            <span class="stat-label">Wrong</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-val" id="statSkipped">0</span>
+            <span class="stat-label">Skipped</span>
+          </div>
+        </div>
+        <div class="high-score-banner hidden" id="newHighBanner">
+          🏆 New High Score!
+        </div>
+        <div class="result-actions">
+          <button class="btn-primary" id="restartBtn">
+            <span>Play Again</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+          </button>
+          <button class="btn-ghost" id="reviewBtn">Review Answers</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SCREEN 5: Review ── -->
+    <section class="screen hidden" id="reviewScreen">
+      <div class="review-header">
+        <button class="btn-back" id="backBtn">← Back to Results</button>
+        <h2 class="review-title">Answer Review</h2>
+      </div>
+      <div class="review-list" id="reviewList">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

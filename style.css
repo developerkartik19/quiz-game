@@ -1,0 +1,811 @@
+/* ════════════════════════════════════════
+   QUIZFORGE — STYLESHEET
+   Aesthetic: Sleek dark-default with neon
+   accent. Card-based. High motion.
+   ════════════════════════════════════════ */
+
+/* ── 1. CSS CUSTOM PROPERTIES ── */
+:root {
+  /* Light theme */
+  --bg:          #f0f0f4;
+  --bg2:         #e4e4eb;
+  --surface:     #ffffff;
+  --surface2:    #f7f7fb;
+  --border:      rgba(0,0,0,0.09);
+  --text:        #111118;
+  --text-muted:  #6b6b80;
+  --accent:      #6c47ff;
+  --accent-glow: rgba(108, 71, 255, 0.25);
+  --accent2:     #ff4778;
+  --success:     #00c26f;
+  --success-bg:  rgba(0,194,111,0.12);
+  --error:       #ff3b5c;
+  --error-bg:    rgba(255,59,92,0.12);
+  --warning:     #ff9f0a;
+  --shadow:      0 8px 32px rgba(0,0,0,0.10);
+  --shadow-lg:   0 20px 60px rgba(0,0,0,0.14);
+  --radius:      20px;
+  --radius-sm:   12px;
+  --transition:  0.28s cubic-bezier(0.4,0,0.2,1);
+}
+
+[data-theme="dark"] {
+  --bg:          #0d0d14;
+  --bg2:         #13131f;
+  --surface:     #18182a;
+  --surface2:    #1f1f30;
+  --border:      rgba(255,255,255,0.07);
+  --text:        #f0f0fa;
+  --text-muted:  #7878a0;
+  --accent:      #7c5cff;
+  --accent-glow: rgba(124,92,255,0.30);
+  --shadow:      0 8px 32px rgba(0,0,0,0.40);
+  --shadow-lg:   0 20px 60px rgba(0,0,0,0.60);
+}
+
+/* ── 2. RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: 'DM Sans', 'Outfit', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background var(--transition), color var(--transition);
+  background-image: radial-gradient(ellipse 80% 60% at 50% -20%, var(--accent-glow), transparent);
+  background-attachment: fixed;
+}
+
+/* ── 3. HEADER ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: transparent;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: -0.04em;
+  color: var(--text);
+}
+.logo span { color: var(--accent); }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.high-score-display {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 6px 14px;
+  letter-spacing: 0.01em;
+}
+
+.theme-toggle {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.theme-toggle:hover {
+  transform: rotate(20deg) scale(1.08);
+  box-shadow: var(--shadow);
+}
+
+/* ── 4. LAYOUT ── */
+.app-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px 60px;
+}
+
+/* ── 5. SCREENS ── */
+.screen {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: screenIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.screen.hidden { display: none; }
+
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(28px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── 6. CARD ── */
+.card {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px;
+  box-shadow: var(--shadow-lg);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+/* ── 7. START SCREEN ── */
+.start-card { text-align: center; }
+
+.start-badge {
+  display: inline-block;
+  background: var(--accent-glow);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 30px;
+  border: 1px solid var(--accent);
+  margin-bottom: 20px;
+}
+
+.start-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(2.4rem, 7vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  margin-bottom: 18px;
+}
+.start-title em {
+  font-style: normal;
+  color: var(--accent);
+  position: relative;
+}
+
+.start-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 380px;
+  margin: 0 auto 32px;
+}
+
+/* Category & Difficulty selectors */
+.category-selector, .difficulty-selector {
+  margin-bottom: 24px;
+  text-align: left;
+}
+.selector-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.category-pills, .diff-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  padding: 8px 16px;
+  border-radius: 30px;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.pill.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+.api-note {
+  margin-top: 16px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  min-height: 1em;
+}
+
+/* ── 8. LOADING ── */
+.loading-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 64px 40px;
+}
+
+.loader-ring {
+  width: 56px; height: 56px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* ── 9. QUIZ HUD ── */
+.quiz-hud {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+
+.hud-item { min-width: 80px; }
+.hud-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.hud-value {
+  display: block;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Circular Timer */
+.hud-timer {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.timer-ring {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+.timer-track {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 3;
+}
+.timer-progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 113.1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+.timer-num {
+  position: relative;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text);
+  z-index: 1;
+}
+
+/* ── 10. PROGRESS BAR ── */
+.progress-track {
+  width: 100%;
+  height: 5px;
+  background: var(--surface2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 999px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0%;
+}
+
+/* ── 11. QUESTION CARD ── */
+.question-card {
+  padding: 36px;
+  transition: transform 0.2s;
+}
+
+.q-category {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.q-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--text);
+  margin-bottom: 28px;
+  min-height: 60px;
+}
+
+/* ── 12. OPTIONS ── */
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.option-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateX(4px);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+/* Option letter badge */
+.option-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--border);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+/* State: Selected / Correct / Wrong */
+.option-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+.option-btn.correct {
+  border-color: var(--success);
+  background: var(--success-bg);
+  color: var(--success);
+}
+.option-btn.correct .option-letter {
+  background: var(--success);
+  color: #fff;
+}
+.option-btn.wrong {
+  border-color: var(--error);
+  background: var(--error-bg);
+  color: var(--error);
+}
+.option-btn.wrong .option-letter {
+  background: var(--error);
+  color: #fff;
+}
+.option-btn:disabled { cursor: default; transform: none; }
+.option-btn:disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+/* Option result icon */
+.option-icon {
+  margin-left: auto;
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.option-btn.correct .option-icon,
+.option-btn.wrong .option-icon { opacity: 1; }
+
+/* Feedback bar */
+.q-feedback {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  animation: feedbackIn 0.3s ease forwards;
+}
+.q-feedback.correct-fb { background: var(--success-bg); color: var(--success); border: 1px solid var(--success); }
+.q-feedback.wrong-fb   { background: var(--error-bg);   color: var(--error);   border: 1px solid var(--error); }
+.q-feedback.timeout-fb { background: rgba(255,159,10,0.12); color: var(--warning); border: 1px solid var(--warning); }
+.q-feedback.hidden { display: none; }
+
+@keyframes feedbackIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 13. RESULT SCREEN ── */
+.result-card {
+  text-align: center;
+  padding: 48px 40px;
+}
+
+.result-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 8px;
+  animation: bounceIn 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes bounceIn {
+  from { transform: scale(0.3); opacity: 0; }
+  60%  { transform: scale(1.15); }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.result-grade {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+
+/* Circular Score */
+.score-circle {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 32px;
+}
+.score-circle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.score-track {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 8;
+}
+.score-arc {
+  fill: none;
+  stroke: url(#scoreGrad);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 326.7;
+  stroke-dashoffset: 326.7;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.score-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.score-pct {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text);
+}
+.score-sub {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* SVG Gradient for score arc */
+svg defs { display: none; }
+
+.result-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 24px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.stat-item {
+  flex: 1;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.stat-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.stat-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.stat-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+}
+
+.high-score-banner {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 24px;
+  animation: pulseGlow 1.5s ease-in-out infinite alternate;
+}
+@keyframes pulseGlow {
+  from { box-shadow: 0 4px 20px var(--accent-glow); }
+  to   { box-shadow: 0 8px 40px rgba(255,71,120,0.35); }
+}
+.high-score-banner.hidden { display: none; }
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── 14. BUTTONS ── */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 28px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: all var(--transition);
+  box-shadow: 0 6px 24px var(--accent-glow);
+}
+.btn-primary svg { width: 18px; height: 18px; }
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 36px var(--accent-glow);
+  filter: brightness(1.1);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px 28px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── 15. REVIEW SCREEN ── */
+.review-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.review-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.btn-back {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.btn-back:hover { color: var(--accent); border-color: var(--accent); }
+
+.review-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 40px;
+}
+
+.review-item {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px 24px;
+  transition: border-color var(--transition);
+}
+.review-item.rev-correct { border-color: var(--success); }
+.review-item.rev-wrong   { border-color: var(--error); }
+.review-item.rev-skipped { border-color: var(--warning); }
+
+.rev-q-num {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.rev-q-text {
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.rev-answers { display: flex; flex-direction: column; gap: 6px; }
+.rev-answer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+.rev-answer .rev-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.rev-correct-ans .rev-dot { background: var(--success); }
+.rev-wrong-ans   .rev-dot { background: var(--error); }
+.rev-correct-ans { color: var(--success); }
+.rev-wrong-ans   { color: var(--error); }
+
+/* ── 16. TIMER WARNING STATES ── */
+.timer-progress.warn  { stroke: var(--warning); }
+.timer-progress.danger{ stroke: var(--error); }
+.timer-num.danger { color: var(--error); animation: timerPulse 0.5s ease-in-out infinite alternate; }
+@keyframes timerPulse {
+  from { transform: scale(1); }
+  to   { transform: scale(1.2); }
+}
+
+/* ── 17. CARD FLIP TRANSITION ── */
+@keyframes cardFlip {
+  0%   { opacity: 1; transform: rotateY(0deg); }
+  50%  { opacity: 0; transform: rotateY(90deg); }
+  51%  { opacity: 0; transform: rotateY(-90deg); }
+  100% { opacity: 1; transform: rotateY(0deg); }
+}
+.question-card.flip {
+  animation: cardFlip 0.45s ease-in-out;
+}
+
+/* ── 18. SHAKE ANIMATION (wrong answer) ── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+.option-btn.shake {
+  animation: shake 0.4s ease;
+}
+
+/* ── 19. RESPONSIVE ── */
+@media (max-width: 600px) {
+  .header { padding: 14px 20px; }
+  .card   { padding: 24px 20px; }
+  .question-card { padding: 24px 20px; }
+  .result-card   { padding: 32px 20px; }
+  .start-title   { font-size: 2.2rem; }
+  .category-pills { gap: 6px; }
+  .pill { padding: 7px 12px; font-size: 0.76rem; }
+  .score-circle { width: 130px; height: 130px; }
+  .score-pct { font-size: 2rem; }
+  .review-header { flex-direction: column; align-items: flex-start; }
+}
